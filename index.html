@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Display Name - AI Solutions & Branding for Small Businesses</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles & Animations -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A;
+            color: #E5E7EB; /* gray-200 */
+            cursor: none; /* Hide default cursor */
+        }
+        
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
+            z-index: 9999;
+        }
+
+        /* Animated Gradient Background for Hero */
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #0A0A0A, #1E002B, #002B2B, #0A0A0A);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.5); /* gray-900/50 */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Hover Glow Effect for Cards */
+        .glass-card .glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, rgba(0, 240, 255, 0) 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        .glass-card:hover .glow {
+            opacity: 1;
+        }
+        
+        /* Pulsating Button Animation */
+        .pulsating-button {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(217, 0, 255, 0.6), 0 0 20px rgba(0, 240, 255, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(217, 0, 255, 0.9), 0 0 35px rgba(0, 240, 255, 0.9);
+            }
+        }
+
+        /* Scroll-triggered fade-in animation */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #hero-3d-canvas, #hero-particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        #hero-3d-canvas { z-index: 2; }
+    </style>
+</head>
+<body class="selection:bg-[#D900FF]/30">
+    
+    <div class="custom-cursor"></div>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D900FF] to-[#00F0FF]">
+                Creative Display Name
+            </a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#services" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Services</a>
+                <a href="#starter-kits" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Kits</a>
+                <a href="#results" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Results</a>
+                <a href="#pricing" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Pricing</a>
+            </div>
+            <a href="#closing-cta" class="hidden md:inline-block px-5 py-2 rounded-md bg-[#D900FF] text-black font-semibold hover:bg-[#00F0FF] transition-all duration-300 shadow-[0_0_15px_rgba(217,0,255,0.6)] hover:shadow-[0_0_20px_rgba(0,240,255,0.8)]">
+                Book a Free Demo
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex items-center justify-center text-center overflow-hidden animated-gradient-bg">
+            <canvas id="hero-particles-canvas"></canvas>
+            <canvas id="hero-3d-canvas"></canvas>
+            
+            <div class="relative z-10 px-4">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-white via-[#D900FF] to-[#00F0FF]">
+                    AI Solutions & Creative Branding for Small Business Growth
+                </h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-300 mb-8">
+                    From branding kits to business-boosting automations — we make small businesses look bigger and work smarter.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#starter-kits" class="px-8 py-3 rounded-lg bg-white text-black font-bold hover:scale-105 transition-transform duration-300">
+                        See Our Starter Kits
+                    </a>
+                    <a href="#closing-cta" class="px-8 py-3 rounded-lg border-2 border-[#00F0FF] text-[#00F0FF] font-bold hover:bg-[#00F0FF] hover:text-black transition-all duration-300">
+                        Book a Free Demo
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Overview -->
+        <section id="services" class="py-24 px-6 fade-in-section">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Our Four Pillars of Growth</h2>
+                <p class="text-gray-400 mb-12">The foundation of our strategy to elevate your business.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-8 rounded-2xl glass-card group transition-all duration-300 hover:border-[#D900FF]/50 hover:-translate-y-2">
+                        <div class="glow"></div><h3 class="text-xl font-semibold text-[#D900FF] mb-2">AI Branding</h3><p class="text-gray-400">Launch with a brand you love</p>
+                    </div>
+                    <div class="p-8 rounded-2xl glass-card group transition-all duration-300 hover:border-[#00F0FF]/50 hover:-translate-y-2">
+                        <div class="glow"></div><h3 class="text-xl font-semibold text-[#00F0FF] mb-2">Marketing Automation</h3><p class="text-gray-400">Social, email, promos on autopilot</p>
+                    </div>
+                    <div class="p-8 rounded-2xl glass-card group transition-all duration-300 hover:border-[#D900FF]/50 hover:-translate-y-2">
+                        <div class="glow"></div><h3 class="text-xl font-semibold text-[#D900FF] mb-2">Local SEO & Review Boosting</h3><p class="text-gray-400">Be found, be trusted</p>
+                    </div>
+                    <div class="p-8 rounded-2xl glass-card group transition-all duration-300 hover:border-[#00F0FF]/50 hover:-translate-y-2">
+                        <div class="glow"></div><h3 class="text-xl font-semibold text-[#00F0FF] mb-2">Data & Insights</h3><p class="text-gray-400">Know what’s working in real time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Industry Starter Kits -->
+        <section id="starter-kits" class="py-24 px-6 bg-black/20 fade-in-section">
+            <div class="container mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Solutions Tailored To Your Industry</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="rounded-xl overflow-hidden glass-card group">
+                        <div class="h-56 overflow-hidden"><img src="https://placehold.co/600x400/111827/FFF?text=Cafe" alt="Cafe" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="p-6"><h3 class="text-2xl font-bold text-[#00F0FF] mb-4">Cafés</h3><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Daily specials templates</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Latte art social posts</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>AI-powered loyalty emails</li></ul></div>
+                    </div>
+                    <div class="rounded-xl overflow-hidden glass-card group">
+                        <div class="h-56 overflow-hidden"><img src="https://placehold.co/600x400/111827/FFF?text=Salon" alt="Salon" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="p-6"><h3 class="text-2xl font-bold text-[#D900FF] mb-4">Salons</h3><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Before & after reels</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Automated booking flows</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Seasonal promo campaigns</li></ul></div>
+                    </div>
+                    <div class="rounded-xl overflow-hidden glass-card group">
+                        <div class="h-56 overflow-hidden"><img src="https://placehold.co/600x400/111827/FFF?text=E-Commerce" alt="E-Commerce" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="p-6"><h3 class="text-2xl font-bold text-[#00F0FF] mb-4">Local E-Commerce</h3><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Dynamic product cards</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Abandoned cart sequences</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>New product launch promos</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Studies & Quick Wins -->
+        <section id="results" class="py-24 px-6 fade-in-section">
+            <div class="container mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Real Results for Businesses Like Yours</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center">
+                    <div><p class="metric-counter text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D900FF] to-[#00F0FF]" data-target="22" data-suffix="%+">0%</p><p class="text-gray-300 mt-2">customer reviews</p></div>
+                    <div><p class="metric-counter text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D900FF] to-[#00F0FF]" data-target="30" data-suffix="%">0%</p><p class="text-gray-300 mt-2">more foot traffic</p></div>
+                    <div><p class="metric-counter text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D900FF] to-[#00F0FF]" data-target="4" data-suffix=" hrs">0 hrs</p><p class="text-gray-300 mt-2">saved/week</p></div>
+                </div>
+                <div class="p-8 rounded-lg glass-card">
+                    <p class="text-xl italic text-gray-300">"They completely transformed our online presence. We look like a national brand now, and our regulars love it!"</p>
+                    <p class="mt-4 font-bold text-[#D900FF] text-right">— Jenna R., <span class="text-gray-400 font-normal">Owner, The Daily Grind Café</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing & Packages -->
+        <section id="pricing" class="py-24 px-6 bg-black/20 fade-in-section">
+            <div class="container mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Simple Pricing, Powerful Results</h2>
+                <div id="pricing-toggle" class="flex justify-center my-8">
+                    <div class="relative flex p-1 bg-gray-800 rounded-lg">
+                        <button data-plan="oneTime" class="pricing-btn relative z-10 px-6 py-2 rounded-md text-sm font-semibold transition-colors">One-Time Projects</button>
+                        <button data-plan="monthly" class="pricing-btn relative z-10 px-6 py-2 rounded-md text-sm font-semibold transition-colors">Monthly</button>
+                        <div id="pricing-glider" class="absolute inset-0 bg-[#00F0FF] rounded-md z-0 transition-transform duration-300 ease-out"></div>
+                    </div>
+                </div>
+                <div id="pricing-grids">
+                    <div id="oneTime-plans" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="p-8 rounded-2xl glass-card flex flex-col"><h3 class="text-2xl font-bold text-[#00F0FF]">Kickstart Brand Kit</h3><p class="text-gray-400 mt-2 flex-grow">Everything to launch a beautiful, consistent brand.</p><p class="text-5xl font-bold my-6">$199<span class="text-lg font-normal text-gray-400">/one-time</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-gray-700 hover:bg-gray-600">Launch My Brand</a></div>
+                        <div class="p-8 rounded-2xl glass-card flex flex-col border-2 border-[#D900FF] shadow-[0_0_20px_rgba(217,0,255,0.4)]"><h3 class="text-2xl font-bold text-[#D900FF]">Brand + AI Growth Kit</h3><p class="text-gray-400 mt-2 flex-grow">A complete setup package for ongoing success.</p><p class="text-5xl font-bold my-6">$899<span class="text-lg font-normal text-gray-400">/setup</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-[#D900FF] text-black hover:bg-[#00F0FF]">Get The Full Package</a></div>
+                        <div class="p-8 rounded-2xl glass-card flex flex-col"><h3 class="text-2xl font-bold text-[#00F0FF]">AI Starter Workflow</h3><p class="text-gray-400 mt-2 flex-grow">We'll set up and train you on one core AI tool.</p><p class="text-5xl font-bold my-6">$149<span class="text-lg font-normal text-gray-400">/one-time</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-gray-700 hover:bg-gray-600">Automate Now</a></div>
+                    </div>
+                    <div id="monthly-plans" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                         <div class="p-8 rounded-2xl glass-card flex flex-col"><h3 class="text-2xl font-bold text-[#00F0FF]">Brand + AI Growth Kit</h3><p class="text-gray-400 mt-2 flex-grow">Ongoing brand assets and automations to fuel growth.</p><p class="text-5xl font-bold my-6">$299<span class="text-lg font-normal text-gray-400">/mo</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-gray-700 hover:bg-gray-600">Start Growing</a></div>
+                         <div class="p-8 rounded-2xl glass-card flex flex-col border-2 border-[#D900FF] shadow-[0_0_20px_rgba(217,0,255,0.4)]"><h3 class="text-2xl font-bold text-[#D900FF]">Local Hero</h3><p class="text-gray-400 mt-2 flex-grow">Dominate your local market with managed SEO & promos.</p><p class="text-5xl font-bold my-6">$399<span class="text-lg font-normal text-gray-400">/mo</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-[#D900FF] text-black hover:bg-[#00F0FF]">Become a Local Hero</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lead Magnet Strip -->
+        <section class="py-16 px-6 bg-gradient-to-r from-[#D900FF]/20 to-[#00F0FF]/20 fade-in-section">
+            <div class="container mx-auto text-center max-w-2xl">
+                <h2 class="text-3xl font-bold">Get our free Small Biz AI Playbook</h2>
+                <p class="text-gray-300 mt-2 mb-6">Instantly actionable tips for content, reviews, and sales.</p>
+                <form class="flex flex-col sm:flex-row gap-4"><input type="email" placeholder="Enter your email address" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white" required><button type="submit" class="px-8 py-3 rounded-lg bg-[#00F0FF] text-black font-bold whitespace-nowrap">Download Now</button></form>
+            </div>
+        </section>
+
+        <!-- Closing CTA -->
+        <section id="closing-cta" class="text-center py-24 px-6 fade-in-section">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 max-w-3xl mx-auto">Your small business deserves big-brand power.</h2>
+                <a href="#" class="inline-block px-12 py-4 rounded-lg bg-gradient-to-r from-[#D900FF] to-[#00F0FF] text-black font-bold text-lg pulsating-button transition-transform hover:scale-105">Book Your Free Strategy Call</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#D900FF]/30 bg-gray-900/50">
+        <div class="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <p class="text-gray-400 mb-4 md:mb-0">© 2025 Creative Display Name. All Rights Reserved.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-400 hover:text-[#00F0FF] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.316 2.427-.364C9.53 2.013 9.884 2 12.315 2zM12 7.177a4.823 4.823 0 100 9.646 4.823 4.823 0 000-9.646zm0 7.646a2.823 2.823 0 110-5.646 2.823 2.823 0 010 5.646zM18.235 5.952a1.348 1.348 0 100 2.696 1.348 1.348 0 000-2.696z" clip-rule="evenodd" /></svg></a>
+                <a href="#" class="text-gray-400 hover:text-[#00F0FF] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" /></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#closing-cta" class="md:hidden fixed bottom-5 right-5 px-6 py-3 rounded-lg bg-[#D900FF] text-black font-bold shadow-[0_0_20px_rgba(217,0,255,0.7)] animate-pulse">Book Demo</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Custom Cursor ---
+            const cursor = document.querySelector('.custom-cursor');
+            window.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            
+            // --- Header Background on Scroll ---
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('bg-gray-900/50', window.scrollY > 50);
+                header.classList.toggle('backdrop-blur-md', window.scrollY > 50);
+            });
+
+            // --- Pricing Toggle ---
+            const pricingToggle = document.getElementById('pricing-toggle');
+            const pricingBtns = pricingToggle.querySelectorAll('.pricing-btn');
+            const glider = document.getElementById('pricing-glider');
+            const oneTimePlans = document.getElementById('oneTime-plans');
+            const monthlyPlans = document.getElementById('monthly-plans');
+            const initialActiveBtn = pricingToggle.querySelector('[data-plan="oneTime"]');
+            initialActiveBtn.classList.add('text-black');
+            glider.style.width = `${initialActiveBtn.offsetWidth}px`;
+            pricingBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const plan = btn.dataset.plan;
+                    pricingBtns.forEach(b => b.classList.remove('text-black'));
+                    btn.classList.add('text-black');
+                    glider.style.width = `${btn.offsetWidth}px`;
+                    glider.style.transform = `translateX(${btn.offsetLeft}px)`;
+                    oneTimePlans.classList.toggle('hidden', plan !== 'oneTime');
+                    monthlyPlans.classList.toggle('hidden', plan !== 'monthly');
+                });
+            });
+
+            // --- Scroll-triggered Animations ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        if (entry.target.classList.contains('metric-counter')) {
+                            animateCounter(entry.target);
+                            observer.unobserve(entry.target);
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+            document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+            document.querySelectorAll('.metric-counter').forEach(counter => observer.observe(counter));
+
+            // --- Animate Metric Counters ---
+            function animateCounter(element) {
+                const target = parseInt(element.dataset.target, 10);
+                const suffix = element.dataset.suffix || '';
+                let current = 0;
+                const increment = target / 100;
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        element.innerText = Math.ceil(current) + suffix;
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        element.innerText = target + suffix;
+                    }
+                };
+                updateCounter();
+            }
+
+            // --- Card Hover Glow Effect ---
+            document.querySelectorAll('.glass-card').forEach(card => {
+                const glow = card.querySelector('.glow');
+                if (glow) {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        glow.style.left = `${e.clientX - rect.left}px`;
+                        glow.style.top = `${e.clientY - rect.top}px`;
+                    });
+                }
+            });
+
+            // --- Three.js 3D Hero Graphic ---
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('hero-3d-canvas'), alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
+            const material = new THREE.MeshStandardMaterial({ color: 0xD900FF, roughness: 0.3, metalness: 0.8 });
+            const torusKnot = new THREE.Mesh(geometry, material);
+            scene.add(torusKnot);
+
+            const pointLight = new THREE.PointLight(0x00F0FF, 2, 100);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            scene.add(ambientLight);
+            camera.position.z = 5;
+
+            function animate3D() {
+                requestAnimationFrame(animate3D);
+                torusKnot.rotation.x += 0.001;
+                torusKnot.rotation.y += 0.002;
+                const time = Date.now() * 0.0005;
+                pointLight.position.x = Math.sin(time * 0.7) * 6;
+                pointLight.position.y = Math.cos(time * 0.5) * 6;
+                pointLight.position.z = Math.cos(time * 0.3) * 6;
+                renderer.render(scene, camera);
+            }
+            animate3D();
+            
+            // --- Hero Particle System ---
+            const pCanvas = document.getElementById('hero-particles-canvas');
+            const pCtx = pCanvas.getContext('2d');
+            pCanvas.width = window.innerWidth;
+            pCanvas.height = window.innerHeight;
+            let particles = [];
+            const mouse = { x: null, y: null };
+            
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * pCanvas.width;
+                    this.y = Math.random() * pCanvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.color = Math.random() > 0.5 ? '#D900FF' : '#00F0FF';
+                }
+                update() {
+                    if (this.x > pCanvas.width || this.x < 0) this.speedX *= -1;
+                    if (this.y > pCanvas.height || this.y < 0) this.speedY *= -1;
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                }
+                draw() {
+                    pCtx.fillStyle = this.color;
+                    pCtx.beginPath();
+                    pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    pCtx.fill();
+                }
+            }
+            
+            function initParticles() {
+                for (let i = 0; i < 100; i++) particles.push(new Particle());
+            }
+            
+            function animateParticles() {
+                pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            
+            initParticles();
+            animateParticles();
+
+            // --- Handle Window Resize ---
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                pCanvas.width = window.innerWidth;
+                pCanvas.height = window.innerHeight;
+                particles = [];
+                initParticles();
+            });
+        });
+    </script>
+</body>
+</html>
