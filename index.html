@@ -104,34 +104,152 @@
             transform: translateY(0);
         }
         
-        #hero-3d-canvas, #hero-particles-canvas {
+        #hero-3d-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
-        #hero-3d-canvas { z-index: 2; }
+        
+        /* Full-page particle canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind content */
+        }
+
+        /* Ensure main content is above the particle canvas */
+        main, header, footer, .modal-overlay {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .modal-overlay.hidden .modal-content {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        /* Carousel Styles */
+        .carousel-track {
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-image-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .carousel-slide:hover .carousel-image {
+            transform: scale(1.1);
+        }
+        .carousel-content {
+            position: relative;
+            z-index: 5;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.1));
+            padding: 1.5rem;
+        }
+
+        /* AI Chat Widget Styles */
+        #chat-widget-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        #chat-bubble {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #D900FF, #00F0FF);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.5);
+            transition: transform 0.3s ease;
+        }
+        #chat-bubble:hover {
+            transform: scale(1.1);
+        }
+        #chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            transition: all 0.3s ease-in-out;
+        }
+        #chat-window.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+        #chat-messages {
+            height: 350px;
+            overflow-y: auto;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        .user-message {
+            background-color: #00F0FF;
+            color: black;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .ai-message {
+            background-color: #374151; /* gray-700 */
+            color: white;
+            align-self: flex-start;
+        }
     </style>
 </head>
 <body class="selection:bg-[#D900FF]/30">
     
     <div class="custom-cursor"></div>
+    <canvas id="particles-canvas"></canvas>
 
     <!-- Header -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D900FF] to-[#00F0FF]">
+            <a href="#" id="home-link" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D900FF] to-[#00F0FF]">
                 Creative Display Name
             </a>
-            <div class="hidden md:flex space-x-8 items-center">
+            <div class="hidden md:flex space-x-8 items-center main-nav">
                 <a href="#services" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Services</a>
+                <a href="#about" class="text-gray-300 hover:text-[#00F0FF] transition-colors">About Us</a>
                 <a href="#starter-kits" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Kits</a>
                 <a href="#results" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Results</a>
                 <a href="#pricing" class="text-gray-300 hover:text-[#00F0FF] transition-colors">Pricing</a>
             </div>
-            <a href="#closing-cta" class="hidden md:inline-block px-5 py-2 rounded-md bg-[#D900FF] text-black font-semibold hover:bg-[#00F0FF] transition-all duration-300 shadow-[0_0_15px_rgba(217,0,255,0.6)] hover:shadow-[0_0_20px_rgba(0,240,255,0.8)]">
+            <a href="#" class="open-contact-modal hidden md:inline-block px-5 py-2 rounded-md bg-[#D900FF] text-black font-semibold hover:bg-[#00F0FF] transition-all duration-300 shadow-[0_0_15px_rgba(217,0,255,0.6)] hover:shadow-[0_0_20px_rgba(0,240,255,0.8)]">
                 Book a Free Demo
             </a>
         </nav>
@@ -139,8 +257,7 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="relative min-h-screen flex items-center justify-center text-center overflow-hidden animated-gradient-bg">
-            <canvas id="hero-particles-canvas"></canvas>
+        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden animated-gradient-bg">
             <canvas id="hero-3d-canvas"></canvas>
             
             <div class="relative z-10 px-4">
@@ -154,7 +271,7 @@
                     <a href="#starter-kits" class="px-8 py-3 rounded-lg bg-white text-black font-bold hover:scale-105 transition-transform duration-300">
                         See Our Starter Kits
                     </a>
-                    <a href="#closing-cta" class="px-8 py-3 rounded-lg border-2 border-[#00F0FF] text-[#00F0FF] font-bold hover:bg-[#00F0FF] hover:text-black transition-all duration-300">
+                    <a href="#" class="open-contact-modal px-8 py-3 rounded-lg border-2 border-[#00F0FF] text-[#00F0FF] font-bold hover:bg-[#00F0FF] hover:text-black transition-all duration-300">
                         Book a Free Demo
                     </a>
                 </div>
@@ -183,29 +300,87 @@
             </div>
         </section>
 
+        <!-- About Us Section -->
+        <section id="about" class="py-24 px-6 bg-black/20 fade-in-section">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">We're Built for the Bold.</h2>
+                <p class="text-lg text-[#00F0FF] mb-8">Because we started small, just like you.</p>
+                <div class="glass-card p-8 md:p-12 rounded-2xl text-left text-gray-300 space-y-4">
+                    <p>Creative Display Name wasn't born in a boardroom; it was born from a late-night hustle. Our founder started with a small e-commerce store, armed with a great product but a tiny budget. We saw firsthand how bigger brands with massive teams and endless resources dominated the market, leaving little room for the little guy.</p>
+                    <p>Instead of giving up, we got creative. We dove headfirst into the world of branding, automation, and AI, learning how to build a system that could make a one-person shop look and operate like a national brand. The results were staggering. Sales grew, the brand got noticed, and we saved countless hours every week.</p>
+                    <p class="font-bold text-white">That's when we realized our true passion wasn't just selling products—it was empowering other small business owners to fight back. We created this agency to give you the tools, the brand, and the AI-powered engine you need to not just compete, but to win.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Industry Starter Kits -->
-        <section id="starter-kits" class="py-24 px-6 bg-black/20 fade-in-section">
+        <section id="starter-kits" class="py-24 px-6 fade-in-section">
             <div class="container mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Solutions Tailored To Your Industry</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="rounded-xl overflow-hidden glass-card group">
-                        <div class="h-56 overflow-hidden"><img src="https://placehold.co/600x400/111827/FFF?text=Cafe" alt="Cafe" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="p-6"><h3 class="text-2xl font-bold text-[#00F0FF] mb-4">Cafés</h3><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Daily specials templates</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Latte art social posts</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>AI-powered loyalty emails</li></ul></div>
+                <div class="relative max-w-6xl mx-auto">
+                    <div id="carousel-container" class="overflow-hidden">
+                        <div id="carousel-track" class="flex carousel-track">
+                            <!-- Slide 1: Cafes -->
+                            <div class="carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 p-4">
+                                <div class="rounded-xl glass-card group h-full flex flex-col">
+                                    <div class="h-96 relative">
+                                        <div class="carousel-image-wrapper rounded-t-xl"><img class="carousel-image" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1887" alt="Cafe" onerror="this.onerror=null;this.src='https://placehold.co/600x400/111827/FFF?text=Cafe';"></div>
+                                        <div class="carousel-content h-full flex flex-col justify-end"><h3 class="text-2xl font-bold text-white mb-4">Cafés</h3></div>
+                                    </div>
+                                    <div class="p-6 flex-grow"><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Daily specials templates</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Latte art social posts</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>AI-powered loyalty emails</li></ul></div>
+                                </div>
+                            </div>
+                            <!-- Slide 2: Salons -->
+                            <div class="carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 p-4">
+                                <div class="rounded-xl glass-card group h-full flex flex-col">
+                                    <div class="h-96 relative">
+                                        <div class="carousel-image-wrapper rounded-t-xl"><img class="carousel-image" src="https://images.unsplash.com/photo-1599387737255-3407b65d36e3?q=80&w=1887" alt="Salon" onerror="this.onerror=null;this.src='https://placehold.co/600x400/111827/FFF?text=Salon';"></div>
+                                        <div class="carousel-content h-full flex flex-col justify-end"><h3 class="text-2xl font-bold text-white mb-4">Salons</h3></div>
+                                    </div>
+                                    <div class="p-6 flex-grow"><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Before & after reels</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Automated booking flows</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Seasonal promo campaigns</li></ul></div>
+                                </div>
+                            </div>
+                            <!-- Slide 3: E-Commerce -->
+                            <div class="carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 p-4">
+                                <div class="rounded-xl glass-card group h-full flex flex-col">
+                                    <div class="h-96 relative">
+                                        <div class="carousel-image-wrapper rounded-t-xl"><img class="carousel-image" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070" alt="E-Commerce" onerror="this.onerror=null;this.src='https://placehold.co/600x400/111827/FFF?text=E-Commerce';"></div>
+                                        <div class="carousel-content h-full flex flex-col justify-end"><h3 class="text-2xl font-bold text-white mb-4">Local E-Commerce</h3></div>
+                                    </div>
+                                    <div class="p-6 flex-grow"><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Dynamic product cards</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Abandoned cart sequences</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>New product launch promos</li></ul></div>
+                                </div>
+                            </div>
+                            <!-- Slide 4: Liquor Stores -->
+                             <div class="carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 p-4">
+                                <div class="rounded-xl glass-card group h-full flex flex-col">
+                                    <div class="h-96 relative">
+                                        <div class="carousel-image-wrapper rounded-t-xl"><img class="carousel-image" src="https://images.unsplash.com/photo-1580992367041-b794a9b51e01?q=80&w=1925" alt="Liquor Store" onerror="this.onerror=null;this.src='https://placehold.co/600x400/111827/FFF?text=Liquor+Store';"></div>
+                                        <div class="carousel-content h-full flex flex-col justify-end"><h3 class="text-2xl font-bold text-white mb-4">Liquor Stores</h3></div>
+                                    </div>
+                                    <div class="p-6 flex-grow"><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>AI-generated tasting notes</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Holiday promotion bundles</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Shelf talker spotlights</li></ul></div>
+                                </div>
+                            </div>
+                            <!-- Slide 5: Groceries -->
+                            <div class="carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 p-4">
+                                <div class="rounded-xl glass-card group h-full flex flex-col">
+                                    <div class="h-96 relative">
+                                        <div class="carousel-image-wrapper rounded-t-xl"><img class="carousel-image" src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974" alt="Grocery Store" onerror="this.onerror=null;this.src='https://placehold.co/600x400/111827/FFF?text=Groceries';"></div>
+                                        <div class="carousel-content h-full flex flex-col justify-end"><h3 class="text-2xl font-bold text-white mb-4">Groceries</h3></div>
+                                    </div>
+                                    <div class="p-6 flex-grow"><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Weekly specials generator</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>AI-created recipe cards</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Community event posts</li></ul></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="rounded-xl overflow-hidden glass-card group">
-                        <div class="h-56 overflow-hidden"><img src="https://placehold.co/600x400/111827/FFF?text=Salon" alt="Salon" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="p-6"><h3 class="text-2xl font-bold text-[#D900FF] mb-4">Salons</h3><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Before & after reels</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Automated booking flows</li><li class="flex items-start"><span class="text-[#D900FF] mr-2 mt-1">✓</span>Seasonal promo campaigns</li></ul></div>
-                    </div>
-                    <div class="rounded-xl overflow-hidden glass-card group">
-                        <div class="h-56 overflow-hidden"><img src="https://placehold.co/600x400/111827/FFF?text=E-Commerce" alt="E-Commerce" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="p-6"><h3 class="text-2xl font-bold text-[#00F0FF] mb-4">Local E-Commerce</h3><ul class="space-y-2 text-gray-300"><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Dynamic product cards</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>Abandoned cart sequences</li><li class="flex items-start"><span class="text-[#00F0FF] mr-2 mt-1">✓</span>New product launch promos</li></ul></div>
-                    </div>
+                    <!-- Carousel Navigation -->
+                    <button id="carousel-prev" class="absolute top-1/2 -left-4 md:-left-6 -translate-y-1/2 glass-card p-3 rounded-full text-white hover:bg-white/20 transition-colors z-10">&lt;</button>
+                    <button id="carousel-next" class="absolute top-1/2 -right-4 md:-right-6 -translate-y-1/2 glass-card p-3 rounded-full text-white hover:bg-white/20 transition-colors z-10">&gt;</button>
                 </div>
             </div>
         </section>
 
         <!-- Case Studies & Quick Wins -->
-        <section id="results" class="py-24 px-6 fade-in-section">
+        <section id="results" class="py-24 px-6 bg-black/20 fade-in-section">
             <div class="container mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Real Results for Businesses Like Yours</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center">
@@ -221,9 +396,10 @@
         </section>
 
         <!-- Pricing & Packages -->
-        <section id="pricing" class="py-24 px-6 bg-black/20 fade-in-section">
+        <section id="pricing" class="py-24 px-6 fade-in-section">
             <div class="container mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Simple Pricing, Powerful Results</h2>
+                <p class="text-center text-gray-400">Click on any package to see the full details.</p>
                 <div id="pricing-toggle" class="flex justify-center my-8">
                     <div class="relative flex p-1 bg-gray-800 rounded-lg">
                         <button data-plan="oneTime" class="pricing-btn relative z-10 px-6 py-2 rounded-md text-sm font-semibold transition-colors">One-Time Projects</button>
@@ -232,25 +408,73 @@
                     </div>
                 </div>
                 <div id="pricing-grids">
-                    <div id="oneTime-plans" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="p-8 rounded-2xl glass-card flex flex-col"><h3 class="text-2xl font-bold text-[#00F0FF]">Kickstart Brand Kit</h3><p class="text-gray-400 mt-2 flex-grow">Everything to launch a beautiful, consistent brand.</p><p class="text-5xl font-bold my-6">$199<span class="text-lg font-normal text-gray-400">/one-time</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-gray-700 hover:bg-gray-600">Launch My Brand</a></div>
-                        <div class="p-8 rounded-2xl glass-card flex flex-col border-2 border-[#D900FF] shadow-[0_0_20px_rgba(217,0,255,0.4)]"><h3 class="text-2xl font-bold text-[#D900FF]">Brand + AI Growth Kit</h3><p class="text-gray-400 mt-2 flex-grow">A complete setup package for ongoing success.</p><p class="text-5xl font-bold my-6">$899<span class="text-lg font-normal text-gray-400">/setup</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-[#D900FF] text-black hover:bg-[#00F0FF]">Get The Full Package</a></div>
-                        <div class="p-8 rounded-2xl glass-card flex flex-col"><h3 class="text-2xl font-bold text-[#00F0FF]">AI Starter Workflow</h3><p class="text-gray-400 mt-2 flex-grow">We'll set up and train you on one core AI tool.</p><p class="text-5xl font-bold my-6">$149<span class="text-lg font-normal text-gray-400">/one-time</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-gray-700 hover:bg-gray-600">Automate Now</a></div>
+                    <!-- One-Time Plans -->
+                    <div id="oneTime-plans" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="open-pricing-modal p-8 rounded-2xl glass-card flex flex-col border-2 border-[#D900FF] shadow-[0_0_20px_rgba(217,0,255,0.4)] cursor-pointer"
+                             data-title="AI Content Starter Pack"
+                             data-price="$79"
+                             data-frequency="/one-time"
+                             data-description="The perfect impulse buy to solve your biggest content headache. We deliver a full month of ready-to-post social media content tailored to your business."
+                             data-features='["12 AI-generated social media posts","Industry-specific content calendar","Relevant hashtag suggestions","AI-generated image prompts for each post","Delivered in a simple, copy-paste format"]'>
+                            <h3 class="text-2xl font-bold text-[#D900FF]">AI Content Starter Pack</h3>
+                            <p class="text-gray-400 mt-2 flex-grow">A month of AI-generated social posts to kickstart your content.</p>
+                            <p class="text-5xl font-bold my-6">$79<span class="text-lg font-normal text-gray-400">/one-time</span></p>
+                        </div>
+                        <div class="open-pricing-modal p-8 rounded-2xl glass-card flex flex-col cursor-pointer"
+                             data-title="Kickstart Brand Kit"
+                             data-price="$199"
+                             data-frequency="/one-time"
+                             data-description="Everything you need to launch a beautiful, consistent, and professional brand from day one."
+                             data-features='["5 AI-generated name options","Domain & social handle check","3 Logo concepts","Full color palette selection","Social media profile assets (all platforms)","Customizable Canva template for posts","1-page brand voice & style guide"]'>
+                            <h3 class="text-2xl font-bold text-[#00F0FF]">Kickstart Brand Kit</h3>
+                            <p class="text-gray-400 mt-2 flex-grow">Everything to launch a beautiful, consistent brand.</p>
+                            <p class="text-5xl font-bold my-6">$199<span class="text-lg font-normal text-gray-400">/one-time</span></p>
+                        </div>
+                        <div class="open-pricing-modal p-8 rounded-2xl glass-card flex flex-col cursor-pointer"
+                             data-title="AI Starter Workflow"
+                             data-price="$149"
+                             data-frequency="/one-time"
+                             data-description="Don't just get a tool, get a system. We'll set up and train you on one core AI marketing tool to save you hours every week."
+                             data-features='["1-on-1 tool setup (e.g., social scheduler, email marketing)","Personalized training session via video call","Custom prompt sheet for your business","30 days of email support for questions"]'>
+                             <h3 class="text-2xl font-bold text-[#00F0FF]">AI Starter Workflow</h3>
+                            <p class="text-gray-400 mt-2 flex-grow">We'll set up and train you on one core AI tool.</p>
+                            <p class="text-5xl font-bold my-6">$149<span class="text-lg font-normal text-gray-400">/one-time</span></p>
+                        </div>
+                        <div class="open-pricing-modal p-8 rounded-2xl glass-card flex flex-col cursor-pointer"
+                             data-title="Full Growth Setup"
+                             data-price="$899"
+                             data-frequency="/setup"
+                             data-description="Our comprehensive one-time setup that includes your full brand identity and the first 3 months of our Brand + AI Growth Kit."
+                             data-features='["Includes everything in the Kickstart Brand Kit","Setup of 3 core marketing automations","First 3 months of content templates","Onboarding strategy call"]'>
+                            <h3 class="text-2xl font-bold text-[#00F0FF]">Full Growth Setup</h3>
+                            <p class="text-gray-400 mt-2 flex-grow">A complete setup package for ongoing success.</p>
+                            <p class="text-5xl font-bold my-6">$899<span class="text-lg font-normal text-gray-400">/setup</span></p>
+                        </div>
                     </div>
+                    <!-- Monthly Plans -->
                     <div id="monthly-plans" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                         <div class="p-8 rounded-2xl glass-card flex flex-col"><h3 class="text-2xl font-bold text-[#00F0FF]">Brand + AI Growth Kit</h3><p class="text-gray-400 mt-2 flex-grow">Ongoing brand assets and automations to fuel growth.</p><p class="text-5xl font-bold my-6">$299<span class="text-lg font-normal text-gray-400">/mo</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-gray-700 hover:bg-gray-600">Start Growing</a></div>
-                         <div class="p-8 rounded-2xl glass-card flex flex-col border-2 border-[#D900FF] shadow-[0_0_20px_rgba(217,0,255,0.4)]"><h3 class="text-2xl font-bold text-[#D900FF]">Local Hero</h3><p class="text-gray-400 mt-2 flex-grow">Dominate your local market with managed SEO & promos.</p><p class="text-5xl font-bold my-6">$399<span class="text-lg font-normal text-gray-400">/mo</span></p><a href="#" class="w-full text-center py-3 rounded-lg font-bold transition-all bg-[#D900FF] text-black hover:bg-[#00F0FF]">Become a Local Hero</a></div>
+                         <div class="open-pricing-modal p-8 rounded-2xl glass-card flex flex-col cursor-pointer"
+                              data-title="Brand + AI Growth Kit"
+                              data-price="$299"
+                              data-frequency="/mo"
+                              data-description="Our core subscription for continuous growth. We provide ongoing brand assets and manage your automations to keep your marketing engine running."
+                              data-features='["Full Brand Kit assets included","Management of 3 active marketing automations","Monthly delivery of new content templates","Quarterly 1-on-1 strategy call","Priority email support"]'>
+                            <h3 class="text-2xl font-bold text-[#00F0FF]">Brand + AI Growth Kit</h3>
+                            <p class="text-gray-400 mt-2 flex-grow">Ongoing brand assets and automations to fuel growth.</p>
+                            <p class="text-5xl font-bold my-6">$299<span class="text-lg font-normal text-gray-400">/mo</span></p>
+                        </div>
+                         <div class="open-pricing-modal p-8 rounded-2xl glass-card flex flex-col border-2 border-[#D900FF] shadow-[0_0_20px_rgba(217,0,255,0.4)] cursor-pointer"
+                              data-title="Local Hero"
+                              data-price="$399"
+                              data-frequency="/mo"
+                              data-description="Dominate your local market. We handle your Google Business Profile, reviews, and local promotions to drive foot traffic and build trust."
+                              data-features='["Full Google Business Profile optimization & management","AI-powered replies to all new reviews","Weekly optimized posts on your GBP","Monthly local digital promo pack (e.g., flyers, social graphics)","Local keyword ranking report"]'>
+                            <h3 class="text-2xl font-bold text-[#D900FF]">Local Hero</h3>
+                            <p class="text-gray-400 mt-2 flex-grow">Dominate your local market with managed SEO & promos.</p>
+                            <p class="text-5xl font-bold my-6">$399<span class="text-lg font-normal text-gray-400">/mo</span></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Lead Magnet Strip -->
-        <section class="py-16 px-6 bg-gradient-to-r from-[#D900FF]/20 to-[#00F0FF]/20 fade-in-section">
-            <div class="container mx-auto text-center max-w-2xl">
-                <h2 class="text-3xl font-bold">Get our free Small Biz AI Playbook</h2>
-                <p class="text-gray-300 mt-2 mb-6">Instantly actionable tips for content, reviews, and sales.</p>
-                <form class="flex flex-col sm:flex-row gap-4"><input type="email" placeholder="Enter your email address" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white" required><button type="submit" class="px-8 py-3 rounded-lg bg-[#00F0FF] text-black font-bold whitespace-nowrap">Download Now</button></form>
             </div>
         </section>
 
@@ -258,7 +482,9 @@
         <section id="closing-cta" class="text-center py-24 px-6 fade-in-section">
             <div class="container mx-auto">
                 <h2 class="text-4xl md:text-5xl font-bold mb-8 max-w-3xl mx-auto">Your small business deserves big-brand power.</h2>
-                <a href="#" class="inline-block px-12 py-4 rounded-lg bg-gradient-to-r from-[#D900FF] to-[#00F0FF] text-black font-bold text-lg pulsating-button transition-transform hover:scale-105">Book Your Free Strategy Call</a>
+                <a href="#" class="open-contact-modal inline-block px-12 py-4 rounded-lg bg-gradient-to-r from-[#D900FF] to-[#00F0FF] text-black font-bold text-lg pulsating-button transition-transform hover:scale-105">
+                    Book Your Free Strategy Call
+                </a>
             </div>
         </section>
     </main>
@@ -268,13 +494,68 @@
         <div class="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <p class="text-gray-400 mb-4 md:mb-0">© 2025 Creative Display Name. All Rights Reserved.</p>
             <div class="flex space-x-6">
-                <a href="#" class="text-gray-400 hover:text-[#00F0FF] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.316 2.427-.364C9.53 2.013 9.884 2 12.315 2zM12 7.177a4.823 4.823 0 100 9.646 4.823 4.823 0 000-9.646zm0 7.646a2.823 2.823 0 110-5.646 2.823 2.823 0 010 5.646zM18.235 5.952a1.348 1.348 0 100 2.696 1.348 1.348 0 000-2.696z" clip-rule="evenodd" /></svg></a>
-                <a href="#" class="text-gray-400 hover:text-[#00F0FF] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" /></svg></a>
+                <a href="https://www.instagram.com/Creative_displayname" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-[#00F0FF] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.316 1.363.364 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.316-2.427.364-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.316-1.363-.364-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.316 2.427-.364C9.53 2.013 9.884 2 12.315 2zM12 7.177a4.823 4.823 0 100 9.646 4.823 4.823 0 000-9.646zm0 7.646a2.823 2.823 0 110-5.646 2.823 2.823 0 010 5.646zM18.235 5.952a1.348 1.348 0 100 2.696 1.348 1.348 0 000-2.696z" clip-rule="evenodd" /></svg></a>
             </div>
         </div>
     </footer>
 
-    <a href="#closing-cta" class="md:hidden fixed bottom-5 right-5 px-6 py-3 rounded-lg bg-[#D900FF] text-black font-bold shadow-[0_0_20px_rgba(217,0,255,0.7)] animate-pulse">Book Demo</a>
+    <a href="#" class="open-contact-modal md:hidden fixed bottom-5 right-5 px-6 py-3 rounded-lg bg-[#D900FF] text-black font-bold shadow-[0_0_20px_rgba(217,0,255,0.7)] animate-pulse">Book Demo</a>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal-overlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 hidden">
+        <div id="contact-modal-content" class="modal-content relative w-full max-w-lg glass-card rounded-2xl p-8">
+            <button id="close-contact-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-3xl">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 text-center">Book Your Free Strategy Call</h2>
+            <p class="text-center text-gray-400 mb-6">Fill out the form below and we'll get back to you within 24 hours.</p>
+            <form action="https://formspree.io/f/YOUR_FORM_ID_HERE" method="POST" class="space-y-4">
+                <div><label for="name" class="block text-sm font-medium text-gray-300">Full Name</label><input type="text" name="name" id="name" required class="mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white"></div>
+                <div><label for="email" class="block text-sm font-medium text-gray-300">Email Address</label><input type="email" name="email" id="email" required class="mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white"></div>
+                <div><label for="business" class="block text-sm font-medium text-gray-300">Business Name</label><input type="text" name="business" id="business" class="mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white"></div>
+                <div><label for="message" class="block text-sm font-medium text-gray-300">Tell us about your goals</label><textarea name="message" id="message" rows="4" class="mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white"></textarea></div>
+                <div><button type="submit" class="w-full px-8 py-3 rounded-lg bg-gradient-to-r from-[#D900FF] to-[#00F0FF] text-black font-bold">Send My Request</button></div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Pricing Details Modal -->
+    <div id="pricing-modal-overlay" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 hidden">
+        <div id="pricing-modal-content" class="modal-content relative w-full max-w-lg glass-card rounded-2xl p-8">
+            <button id="close-pricing-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-3xl">&times;</button>
+            <h2 id="pricing-modal-title" class="text-3xl font-bold text-center mb-2"></h2>
+            <p id="pricing-modal-price" class="text-center text-5xl font-bold my-4"></p>
+            <p id="pricing-modal-description" class="text-center text-gray-300 mb-6"></p>
+            <h3 class="font-bold text-lg mb-2 text-[#00F0FF]">What's Included:</h3>
+            <ul id="pricing-modal-features" class="space-y-2 text-gray-300"></ul>
+            <a href="#" class="open-contact-modal mt-8 w-full block text-center py-3 rounded-lg font-bold transition-all bg-[#D900FF] text-black hover:bg-[#00F0FF]">Get This Package</a>
+        </div>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div id="chat-widget-container">
+        <div id="chat-window" class="hidden">
+            <div class="glass-card rounded-2xl h-full flex flex-col">
+                <div class="p-4 border-b border-white/10 text-center">
+                    <h3 class="font-bold text-white">AI Assistant</h3>
+                    <p class="text-xs text-gray-400">Powered by Gemini</p>
+                </div>
+                <div id="chat-messages" class="flex-1 p-4 flex flex-col">
+                    <!-- Messages will be injected here -->
+                </div>
+                <form id="chat-form" class="p-4 border-t border-white/10 flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Ask a question..." class="flex-1 w-full px-4 py-2 rounded-lg bg-gray-800 border border-white/20 focus:ring-2 focus:ring-[#00F0FF] focus:outline-none text-white">
+                    <button type="submit" class="p-2 bg-[#00F0FF] rounded-lg text-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div id="chat-bubble">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -291,6 +572,69 @@
                 header.classList.toggle('bg-gray-900/50', window.scrollY > 50);
                 header.classList.toggle('backdrop-blur-md', window.scrollY > 50);
             });
+            
+            // --- Smooth Scrolling for Nav Links ---
+            document.querySelectorAll('.main-nav a, #home-link').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = targetId === '#' ? document.body : document.querySelector(targetId);
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // --- Contact Modal Logic ---
+            const contactModalOverlay = document.getElementById('contact-modal-overlay');
+            const closeContactModalBtn = document.getElementById('close-contact-modal-btn');
+            const openContactModalBtns = document.querySelectorAll('.open-contact-modal');
+
+            const openContactModal = () => contactModalOverlay.classList.remove('hidden');
+            const closeContactModal = () => contactModalOverlay.classList.add('hidden');
+
+            openContactModalBtns.forEach(btn => btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                closePricingModal(); // Close pricing modal if open
+                openContactModal();
+            }));
+            closeContactModalBtn.addEventListener('click', closeContactModal);
+            contactModalOverlay.addEventListener('click', (e) => {
+                if (e.target === contactModalOverlay) closeContactModal();
+            });
+            
+            // --- Pricing Details Modal Logic ---
+            const pricingModalOverlay = document.getElementById('pricing-modal-overlay');
+            const closePricingModalBtn = document.getElementById('close-pricing-modal-btn');
+            const openPricingModalBtns = document.querySelectorAll('.open-pricing-modal');
+            const pricingModal = {
+                title: document.getElementById('pricing-modal-title'),
+                price: document.getElementById('pricing-modal-price'),
+                description: document.getElementById('pricing-modal-description'),
+                features: document.getElementById('pricing-modal-features'),
+            };
+
+            const openPricingModal = () => pricingModalOverlay.classList.remove('hidden');
+            const closePricingModal = () => pricingModalOverlay.classList.add('hidden');
+
+            openPricingModalBtns.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const data = card.dataset;
+                    pricingModal.title.textContent = data.title;
+                    pricingModal.price.innerHTML = `${data.price}<span class="text-lg font-normal text-gray-400">${data.frequency}</span>`;
+                    pricingModal.description.textContent = data.description;
+                    
+                    const featuresList = JSON.parse(data.features);
+                    pricingModal.features.innerHTML = featuresList.map(feature => `<li class="flex items-start"><span class="text-[#00F0FF] mr-3 mt-1">✓</span>${feature}</li>`).join('');
+                    
+                    openPricingModal();
+                });
+            });
+            closePricingModalBtn.addEventListener('click', closePricingModal);
+            pricingModalOverlay.addEventListener('click', (e) => {
+                if (e.target === pricingModalOverlay) closePricingModal();
+            });
+
 
             // --- Pricing Toggle ---
             const pricingToggle = document.getElementById('pricing-toggle');
@@ -333,17 +677,21 @@
                 const target = parseInt(element.dataset.target, 10);
                 const suffix = element.dataset.suffix || '';
                 let current = 0;
-                const increment = target / 100;
-                const updateCounter = () => {
+                const duration = 2000;
+                const stepTime = 20;
+                const totalSteps = duration / stepTime;
+                const increment = target / totalSteps;
+
+                const update = () => {
                     current += increment;
                     if (current < target) {
                         element.innerText = Math.ceil(current) + suffix;
-                        requestAnimationFrame(updateCounter);
+                        setTimeout(update, stepTime);
                     } else {
                         element.innerText = target + suffix;
                     }
                 };
-                updateCounter();
+                update();
             }
 
             // --- Card Hover Glow Effect ---
@@ -388,26 +736,20 @@
             }
             animate3D();
             
-            // --- Hero Particle System ---
-            const pCanvas = document.getElementById('hero-particles-canvas');
+            // --- Full Page Particle System ---
+            const pCanvas = document.getElementById('particles-canvas');
             const pCtx = pCanvas.getContext('2d');
             pCanvas.width = window.innerWidth;
-            pCanvas.height = window.innerHeight;
+            pCanvas.height = document.body.scrollHeight;
             let particles = [];
-            const mouse = { x: null, y: null };
             
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
             class Particle {
                 constructor() {
                     this.x = Math.random() * pCanvas.width;
                     this.y = Math.random() * pCanvas.height;
                     this.size = Math.random() * 2 + 1;
-                    this.speedX = Math.random() * 1 - 0.5;
-                    this.speedY = Math.random() * 1 - 0.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
                     this.color = Math.random() > 0.5 ? '#D900FF' : '#00F0FF';
                 }
                 update() {
@@ -425,7 +767,11 @@
             }
             
             function initParticles() {
-                for (let i = 0; i < 100; i++) particles.push(new Particle());
+                particles = [];
+                const particleCount = Math.floor((pCanvas.width * pCanvas.height) / 20000);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
             }
             
             function animateParticles() {
@@ -440,15 +786,105 @@
             initParticles();
             animateParticles();
 
+            // --- Carousel Logic ---
+            const track = document.getElementById('carousel-track');
+            const slides = Array.from(track.children);
+            const nextButton = document.getElementById('carousel-next');
+            const prevButton = document.getElementById('carousel-prev');
+            let slideWidth = slides[0].getBoundingClientRect().width;
+            let currentIndex = 0;
+
+            const updateCarousel = () => {
+                track.style.transform = 'translateX(-' + slideWidth * currentIndex + 'px)';
+            }
+
+            nextButton.addEventListener('click', e => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateCarousel();
+            });
+
+            prevButton.addEventListener('click', e => {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateCarousel();
+            });
+            
+            // --- AI Chat Widget Logic ---
+            const chatBubble = document.getElementById('chat-bubble');
+            const chatWindow = document.getElementById('chat-window');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-messages');
+            let chatHistory = [];
+
+            const toggleChatWindow = () => {
+                chatWindow.classList.toggle('hidden');
+            };
+
+            chatBubble.addEventListener('click', toggleChatWindow);
+
+            const addMessage = (sender, message) => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', sender === 'user' ? 'user-message' : 'ai-message');
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            addMessage('ai', 'Hello! How can I help you learn about our AI and branding services today?');
+            
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
+
+                addMessage('user', userMessage);
+                chatInput.value = '';
+
+                chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
+
+                const prompt = `You are a friendly and helpful AI assistant for "Creative Display Name," an AI Solutions & Branding Agency for Small Businesses. Your goal is to answer questions based on the website's content and encourage users to book a free strategy call. Be concise and helpful. Here is the conversation history: ${JSON.stringify(chatHistory)}. Here is the user's latest message: "${userMessage}"`;
+
+                try {
+                    const apiKey = ""; // Leave empty
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    const payload = { contents: [{ parts: [{ text: prompt }] }] };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error('API request failed');
+                    
+                    const result = await response.json();
+                    const aiMessage = result.candidates[0].content.parts[0].text;
+
+                    addMessage('ai', aiMessage);
+                    chatHistory.push({ role: "model", parts: [{ text: aiMessage }] });
+
+                } catch (error) {
+                    console.error("Chat API Error:", error);
+                    addMessage('ai', "Sorry, I'm having a little trouble connecting. Please try again in a moment.");
+                }
+            });
+
+
             // --- Handle Window Resize ---
             window.addEventListener('resize', () => {
+                // 3D Canvas
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                
+                // Particle Canvas
+                pCanvas.height = document.body.scrollHeight;
                 pCanvas.width = window.innerWidth;
-                pCanvas.height = window.innerHeight;
-                particles = [];
                 initParticles();
+
+                // Carousel
+                slideWidth = slides[0].getBoundingClientRect().width;
+                updateCarousel();
             });
         });
     </script>
