@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creative Display Name - AI Solutions & Branding for Small Businesses</title>
     
+    <!-- FAVICON: A simplified version of your logo -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -177,7 +180,7 @@
         #chat-widget-container {
             position: fixed;
             bottom: 2rem;
-            right: 2rem;
+            left: 2rem; /* MOVED TO LEFT */
             z-index: 1000;
         }
         #chat-bubble {
@@ -198,7 +201,7 @@
         #chat-window {
             position: absolute;
             bottom: 80px;
-            right: 0;
+            left: 0; /* MOVED TO LEFT */
             width: 350px;
             height: 450px;
             transition: all 0.3s ease-in-out;
@@ -620,16 +623,19 @@
             // --- Contact Modal Logic ---
             const contactModalOverlay = document.getElementById('contact-modal-overlay');
             const closeContactModalBtn = document.getElementById('close-contact-modal-btn');
-            const openContactModalBtns = document.querySelectorAll('.open-contact-modal');
-
+            
             const openContactModal = () => contactModalOverlay.classList.remove('hidden');
             const closeContactModal = () => contactModalOverlay.classList.add('hidden');
+            
+            function attachContactModalListeners() {
+                document.querySelectorAll('.open-contact-modal').forEach(btn => btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closePricingModal(); // Close pricing modal if open
+                    openContactModal();
+                }));
+            }
+            attachContactModalListeners();
 
-            openContactModalBtns.forEach(btn => btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                closePricingModal(); // Close pricing modal if open
-                openContactModal();
-            }));
             closeContactModalBtn.addEventListener('click', closeContactModal);
             contactModalOverlay.addEventListener('click', (e) => {
                 if (e.target === contactModalOverlay) closeContactModal();
@@ -744,26 +750,40 @@
             const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('hero-3d-canvas'), alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
 
-            const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
-            const material = new THREE.MeshStandardMaterial({ color: 0xD900FF, roughness: 0.3, metalness: 0.8 });
-            const torusKnot = new THREE.Mesh(geometry, material);
-            scene.add(torusKnot);
+            const group = new THREE.Group();
+            scene.add(group);
 
-            const pointLight = new THREE.PointLight(0x00F0FF, 2, 100);
-            pointLight.position.set(5, 5, 5);
+            // Create a sphere of points (nodes)
+            const pointsGeometry = new THREE.SphereGeometry(1.5, 32, 16);
+            const pointsMaterial = new THREE.PointsMaterial({ color: 0x00F0FF, size: 0.03 });
+            const points = new THREE.Points(pointsGeometry, pointsMaterial);
+            group.add(points);
+
+            // Create lines connecting random points (synapses)
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1 });
+            const vertices = pointsGeometry.attributes.position.array;
+            for (let i = 0; i < 50; i++) {
+                const start = new THREE.Vector3(vertices[Math.floor(Math.random() * vertices.length / 3) * 3], vertices[Math.floor(Math.random() * vertices.length / 3) * 3 + 1], vertices[Math.floor(Math.random() * vertices.length / 3) * 3 + 2]);
+                const end = new THREE.Vector3(vertices[Math.floor(Math.random() * vertices.length / 3) * 3], vertices[Math.floor(Math.random() * vertices.length / 3) * 3 + 1], vertices[Math.floor(Math.random() * vertices.length / 3) * 3 + 2]);
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([start, end]);
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                group.add(line);
+            }
+
+            const pointLight = new THREE.PointLight(0xD900FF, 1.5, 100);
             scene.add(pointLight);
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
             scene.add(ambientLight);
             camera.position.z = 5;
 
             function animate3D() {
                 requestAnimationFrame(animate3D);
-                torusKnot.rotation.x += 0.001;
-                torusKnot.rotation.y += 0.002;
+                group.rotation.x += 0.0005;
+                group.rotation.y += 0.001;
                 const time = Date.now() * 0.0005;
-                pointLight.position.x = Math.sin(time * 0.7) * 6;
-                pointLight.position.y = Math.cos(time * 0.5) * 6;
-                pointLight.position.z = Math.cos(time * 0.3) * 6;
+                pointLight.position.x = Math.sin(time * 0.7) * 3;
+                pointLight.position.y = Math.cos(time * 0.5) * 4;
+                pointLight.position.z = Math.cos(time * 0.3) * 3;
                 renderer.render(scene, camera);
             }
             animate3D();
@@ -800,7 +820,7 @@
             
             function initParticles() {
                 particles = [];
-                const particleCount = Math.floor((pCanvas.width * pCanvas.height) / 20000);
+                const particleCount = Math.floor((pCanvas.width * pCanvas.height) / 8000);
                 for (let i = 0; i < particleCount; i++) {
                     particles.push(new Particle());
                 }
@@ -855,11 +875,22 @@
             chatBubble.addEventListener('click', toggleChatWindow);
 
             const addMessage = (sender, message) => {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('chat-message', sender === 'user' ? 'user-message' : 'ai-message');
-                messageElement.textContent = message;
-                chatMessages.appendChild(messageElement);
+                const messageContainer = document.createElement('div');
+                messageContainer.classList.add('chat-message', sender === 'user' ? 'user-message' : 'ai-message');
+                messageContainer.textContent = message;
+                
+                // If AI suggests booking, add a button
+                if (sender === 'ai' && message.includes("click the button below")) {
+                    const bookButton = document.createElement('button');
+                    bookButton.textContent = 'Book a Free Call';
+                    bookButton.className = 'open-contact-modal mt-2 w-full text-center py-2 rounded-lg font-bold transition-all bg-[#D900FF] text-black hover:bg-[#00F0FF]';
+                    messageContainer.appendChild(document.createElement('br'));
+                    messageContainer.appendChild(bookButton);
+                }
+                
+                chatMessages.appendChild(messageContainer);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+                attachContactModalListeners(); // Re-attach listeners to include new button
             };
 
             addMessage('ai', 'Hello! How can I help you learn about our AI and branding services today?');
@@ -874,7 +905,7 @@
 
                 chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
 
-                const prompt = `You are a friendly and helpful AI assistant for "Creative Display Name," an AI Solutions & Branding Agency for Small Businesses. Your goal is to answer questions based on the website's content and encourage users to book a free strategy call. Be concise and helpful. Here is the conversation history: ${JSON.stringify(chatHistory)}. Here is the user's latest message: "${userMessage}"`;
+                const prompt = `You are a friendly and helpful AI assistant for "Creative Display Name," an AI Solutions & Branding Agency. Your goal is to answer questions based on the website's content and encourage users to book a free strategy call. Be concise. If the user expresses clear intent to book a call, schedule a demo, or start a project (e.g., "I want to book," "how do I sign up," "let's do it"), your primary response MUST be exactly: "Great! To book your free strategy call, please click the button below to open our contact form." Do not add any other text to this specific response. For all other questions, answer normally.`;
 
                 try {
                     const apiKey = ""; // Leave empty
@@ -922,4 +953,3 @@
     </script>
 </body>
 </html>
-
