@@ -9,7 +9,7 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0.6]);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+    <section id="hero" className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center text-center overflow-hidden pt-20 md:pt-0">
       <motion.div style={{ y }} className="absolute inset-0 -z-10">
         <Image src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974" alt="Abstract tech background" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import SafeImage from './SafeImage';
 
 const images = [
   { src: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1887', alt: 'Cafe' },
@@ -14,7 +14,7 @@ export default function ImageGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {images.map(img => (
           <div key={img.src} className="relative aspect-[4/3] overflow-hidden rounded-xl group">
-            <Image
+            <SafeImage
               src={img.src}
               alt={img.alt}
               fill

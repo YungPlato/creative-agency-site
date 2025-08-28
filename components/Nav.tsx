@@ -13,6 +13,7 @@ const sections = [
 
 export default function Nav() {
   const [active, setActive] = useState<string>('');
+  const [open, setOpen] = useState<boolean>(false);
   const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -38,6 +39,13 @@ export default function Nav() {
         <Link href="#" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brandPink to-brandCyan">
           Creative Display Name
         </Link>
+        <button
+          className="md:hidden text-gray-200 border border-white/20 rounded-md px-3 py-2"
+          aria-label="Toggle menu"
+          onClick={() => setOpen(v => !v)}
+        >
+          Menu
+        </button>
         <div className="hidden md:flex space-x-8 items-center">
           {sections.map(s => (
             <a
@@ -53,6 +61,25 @@ export default function Nav() {
           Book a Free Demo
         </a>
       </nav>
+      {open && (
+        <div className="md:hidden container mx-auto px-6 pb-4">
+          <div className="glass rounded-lg p-4 flex flex-col gap-3">
+            {sections.map(s => (
+              <a
+                key={s.href}
+                href={s.href}
+                onClick={() => setOpen(false)}
+                className={`py-2 rounded-md px-2 ${active === s.href ? 'text-brandCyan' : 'text-gray-300'} hover:text-brandCyan`}
+              >
+                {s.label}
+              </a>
+            ))}
+            <a href="#contact" onClick={() => setOpen(false)} className="py-2 rounded-md px-2 text-black bg-brandPink font-semibold text-center hover:bg-brandCyan">
+              Book a Free Demo
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
