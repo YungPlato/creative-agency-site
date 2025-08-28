@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import ThemeToggle from './ThemeToggle';
 
 const sections = [
   { href: '#services', label: 'Services' },
@@ -56,6 +57,7 @@ export default function Nav() {
               {s.label}
             </a>
           ))}
+          <ThemeToggle />
         </div>
         <a href="#contact" className="hidden md:inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all shadow-glow">
           Book a Free Demo

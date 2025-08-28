@@ -2,6 +2,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Modal from './Modal';
+import Hero3D from './Hero3D';
 import { useState } from 'react';
 
 export default function Hero() {
@@ -13,7 +14,7 @@ export default function Hero() {
   return (
     <section id="hero" className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center text-center overflow-hidden pt-20 md:pt-0">
       <motion.div style={{ y }} className="absolute inset-0 -z-10">
-        <Image src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974" alt="Abstract tech background" fill priority className="object-cover" />
+        <Hero3D />
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />
         <svg className="absolute bottom-0 left-0 right-0" viewBox="0 0 1440 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M0 120L60 130C120 140 240 160 360 155C480 150 600 120 720 100C840 80 960 70 1080 85C1200 100 1320 140 1380 160L1440 180V200H0V120Z" fill="url(#g)"/>

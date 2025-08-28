@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://CreativeDisplayName.com'),
@@ -43,7 +44,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="text-gray-200">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
