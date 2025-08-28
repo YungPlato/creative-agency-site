@@ -4,6 +4,7 @@ import SectionDivider from '../components/SectionDivider';
 import ImageGrid from '../components/ImageGrid';
 import Testimonials from '../components/Testimonials';
 import Reveal from '../components/Reveal';
+import BlogPreview from '../components/BlogPreview';
 
 export default function HomePage() {
   return (
@@ -35,6 +36,8 @@ export default function HomePage() {
       <ImageGrid />
       <SectionDivider />
       <Testimonials />
+      <SectionDivider />
+      <BlogPreview />
 
       <section id="about" className="container mx-auto px-6 py-16 scroll-mt-28">
         <Reveal>
@@ -95,10 +98,19 @@ export default function HomePage() {
 
       <footer className="border-t border-brandPink/30 bg-gray-900/50">
         <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-          <p className="text-gray-400">© {new Date().getFullYear()} Creative Display Name</p>
-          <div className="flex gap-6">
-            <a href="https://www.instagram.com/Creative_displayname" target="_blank" rel="noopener noreferrer" className="hover:text-brandCyan">Instagram</a>
+          <div>
+            <p className="text-gray-400">© {new Date().getFullYear()} Creative Display Name</p>
+            <p className="text-gray-500 text-sm">hello@creativedisplayname.com</p>
           </div>
+          <nav className="flex gap-6 items-center">
+            <a href="#services" className="hover:text-brandCyan">Services</a>
+            <a href="#about" className="hover:text-brandCyan">About</a>
+            <a href="#kits" className="hover:text-brandCyan">Kits</a>
+            <a href="#results" className="hover:text-brandCyan">Results</a>
+            <a href="/blog" className="hover:text-brandCyan">Blog</a>
+            <a href="/sitemap.xml" className="hover:text-brandCyan">Sitemap</a>
+            <a href="https://www.instagram.com/Creative_displayname" target="_blank" rel="noopener noreferrer" className="hover:text-brandCyan">Instagram</a>
+          </nav>
         </div>
       </footer>
     </main>

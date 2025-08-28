@@ -44,6 +44,18 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className="text-gray-200">
         {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Creative Display Name',
+              url: 'https://CreativeDisplayName.com/',
+              sameAs: ['https://www.instagram.com/Creative_displayname']
+            })
+          }}
+        />
       </body>
     </html>
   );
