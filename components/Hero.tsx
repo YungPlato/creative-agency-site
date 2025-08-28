@@ -1,9 +1,11 @@
 "use client";
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import Lottie from 'lottie-react';
+import Modal from './Modal';
+import { useState } from 'react';
 
 export default function Hero() {
+  const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 300], [0, 80]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0.6]);
@@ -24,21 +26,32 @@ export default function Hero() {
         </svg>
       </motion.div>
       <motion.div style={{ opacity }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10 px-6">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur text-xs text-gray-200 mb-4">
+          <span className="h-2 w-2 rounded-full bg-brandCyan animate-pulse" /> Premium AI Agency
+        </div>
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-white via-brandPink to-brandCyan">
-          AI Solutions & Creative Branding for Small Business Growth
+          Luxury-grade AI Systems for Ambitious Brands
         </h1>
         <p className="max-w-2xl mx-auto text-gray-300 mb-8">
-          Launch fast, scale smart. We combine brand design with AI automation to grow your revenue.
+          Strategy, design, and automation built on AI. Elevate your brand, compress timelines, and scale with confidence.
         </p>
         <div className="flex items-center justify-center gap-4">
           <a href="#contact" className="px-6 py-3 rounded-lg bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all shadow-glow">
             Get Started
           </a>
-          <a href="#services" className="px-6 py-3 rounded-lg border border-white/20 hover:border-brandCyan text-white transition-all">
-            Explore Services
-          </a>
+          <button onClick={() => setOpen(true)} className="px-6 py-3 rounded-lg border border-white/20 hover:border-brandCyan text-white transition-all">
+            Learn More
+          </button>
         </div>
       </motion.div>
+      <Modal open={open} title="What We Deliver" onClose={() => setOpen(false)}>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>Brand systems designed with AI, from identity to messaging.</li>
+          <li>Marketing automations for content, reviews, email, and CRM.</li>
+          <li>Local SEO and analytics dashboards with actionable insights.</li>
+          <li>Hands-on enablement so your team can run autonomously.</li>
+        </ul>
+      </Modal>
     </section>
   );
 }

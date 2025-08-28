@@ -54,14 +54,36 @@ export default function HomePage() {
           <p className="text-center text-gray-400 mb-8">Pick a kit to launch quickly with proven outcomes.</p>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[ 'AI Content Starter', 'Kickstart Brand Kit', 'AI Starter Workflow' ].map(title => (
-            <Reveal key={title}>
-              <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
-                <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-                <p className="text-gray-400">Templates, tools, and training to move fast.</p>
-              </div>
-            </Reveal>
-          ))}
+          <Reveal>
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+              <h3 className="text-xl font-semibold text-white mb-2">AI Content Starter</h3>
+              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+                <li>30-day content calendar + prompts</li>
+                <li>Auto-generated captions and images</li>
+                <li>Posting workflow setup (1 channel)</li>
+              </ul>
+            </div>
+          </Reveal>
+          <Reveal>
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+              <h3 className="text-xl font-semibold text-white mb-2">Kickstart Brand Kit</h3>
+              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+                <li>AI-assisted naming + messaging</li>
+                <li>Logo directions and color system</li>
+                <li>Profile assets for all socials</li>
+              </ul>
+            </div>
+          </Reveal>
+          <Reveal>
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+              <h3 className="text-xl font-semibold text-white mb-2">AI Starter Workflow</h3>
+              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+                <li>One tool fully set up (e.g., reviews)</li>
+                <li>Personalized prompt library</li>
+                <li>Hands-on training + 30 days support</li>
+              </ul>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -86,13 +108,36 @@ export default function HomePage() {
           <p className="text-center text-gray-400 mb-8">Start with a kit, scale with a plan.</p>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[{t:'Launch',p:'$499'},{t:'Grow',p:'$1,499'},{t:'Scale',p:'$2,999'}].map(plan => (
-            <div key={plan.t} className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
-              <h3 className="text-xl font-semibold text-white">{plan.t}</h3>
-              <div className="text-3xl font-extrabold mt-2">{plan.p}</div>
-              <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
-            </div>
-          ))}
+          <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
+            <h3 className="text-xl font-semibold text-white">Launch</h3>
+            <div className="text-3xl font-extrabold mt-2">$499</div>
+            <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
+              <li>One Starter Kit included</li>
+              <li>1hr strategy call</li>
+              <li>Templates and guides</li>
+            </ul>
+            <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
+          </div>
+          <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
+            <h3 className="text-xl font-semibold text-white">Grow</h3>
+            <div className="text-3xl font-extrabold mt-2">$1,499</div>
+            <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
+              <li>Two Starter Kits included</li>
+              <li>Automation setup (2 tools)</li>
+              <li>Monthly report + review</li>
+            </ul>
+            <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
+          </div>
+          <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
+            <h3 className="text-xl font-semibold text-white">Scale</h3>
+            <div className="text-3xl font-extrabold mt-2">$2,999</div>
+            <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
+              <li>All Starter Kits included</li>
+              <li>Automation setup (4 tools)</li>
+              <li>Quarterly strategy + priority support</li>
+            </ul>
+            <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
+          </div>
         </div>
       </section>
 
