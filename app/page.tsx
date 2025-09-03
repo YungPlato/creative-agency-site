@@ -5,6 +5,40 @@ import ImageGrid from '../components/ImageGrid';
 import Testimonials from '../components/Testimonials';
 import Reveal from '../components/Reveal';
 import BlogPreview from '../components/BlogPreview';
+import AiBrainIcon from '../components/icons/AiBrainIcon';
+import AutomationIcon from '../components/icons/AutomationIcon';
+import SeoIcon from '../components/icons/SeoIcon';
+import DataIcon from '../components/icons/DataIcon';
+import ContentIcon from '../components/icons/ContentIcon';
+import BrandIcon from '../components/icons/BrandIcon';
+import WorkflowIcon from '../components/icons/WorkflowIcon';
+
+const pillars = [
+  {
+    title: 'AI Branding',
+    color: 'from-brandPink',
+    icon: AiBrainIcon,
+    description: 'Launch with a brand you love, powered by AI.'
+  },
+  {
+    title: 'Marketing Automation',
+    color: 'from-brandCyan',
+    icon: AutomationIcon,
+    description: 'Automate your marketing to save time and scale.'
+  },
+  {
+    title: 'Local SEO & Reviews',
+    color: 'from-brandPink',
+    icon: SeoIcon,
+    description: 'Dominate local search and manage your reputation.'
+  },
+  {
+    title: 'Data & Insights',
+    color: 'from-brandCyan',
+    icon: DataIcon,
+    description: 'Turn data into actionable insights for growth.'
+  }
+];
 
 export default function HomePage() {
   return (
@@ -19,13 +53,12 @@ export default function HomePage() {
           <p className="text-center text-gray-400 mb-12">The foundation of our strategy to elevate your business.</p>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[{
-            title: 'AI Branding', color: 'from-brandPink'
-          }, { title: 'Marketing Automation', color: 'from-brandCyan' }, { title: 'Local SEO & Reviews', color: 'from-brandPink' }, { title: 'Data & Insights', color: 'from-brandCyan' }].map(card => (
+          {pillars.map(card => (
             <Reveal key={card.title}>
-              <div className="p-8 rounded-2xl glass group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow">
+              <div className="p-8 rounded-2xl glass group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow text-center">
+                <card.icon className="w-12 h-12 mx-auto mb-4 text-brandPink" />
                 <h3 className={`text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-br ${card.color} to-white mb-2`}>{card.title}</h3>
-                <p className="text-gray-400">Launch with a brand you love</p>
+                <p className="text-gray-400">{card.description}</p>
               </div>
             </Reveal>
           ))}
@@ -55,9 +88,10 @@ export default function HomePage() {
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Reveal>
-            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all text-center">
+              <ContentIcon className="w-12 h-12 mx-auto mb-4 text-brandCyan" />
               <h3 className="text-xl font-semibold text-white mb-2">AI Content Starter</h3>
-              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+              <ul className="text-gray-300 space-y-2 list-disc pl-5 text-left">
                 <li>30-day content calendar + prompts</li>
                 <li>Auto-generated captions and images</li>
                 <li>Posting workflow setup (1 channel)</li>
@@ -65,9 +99,10 @@ export default function HomePage() {
             </div>
           </Reveal>
           <Reveal>
-            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all text-center">
+              <BrandIcon className="w-12 h-12 mx-auto mb-4 text-brandCyan" />
               <h3 className="text-xl font-semibold text-white mb-2">Kickstart Brand Kit</h3>
-              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+              <ul className="text-gray-300 space-y-2 list-disc pl-5 text-left">
                 <li>AI-assisted naming + messaging</li>
                 <li>Logo directions and color system</li>
                 <li>Profile assets for all socials</li>
@@ -75,9 +110,10 @@ export default function HomePage() {
             </div>
           </Reveal>
           <Reveal>
-            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all text-center">
+              <WorkflowIcon className="w-12 h-12 mx-auto mb-4 text-brandCyan" />
               <h3 className="text-xl font-semibold text-white mb-2">AI Starter Workflow</h3>
-              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+              <ul className="text-gray-300 space-y-2 list-disc pl-5 text-left">
                 <li>One tool fully set up (e.g., reviews)</li>
                 <li>Personalized prompt library</li>
                 <li>Hands-on training + 30 days support</li>
@@ -161,4 +197,3 @@ export default function HomePage() {
     </main>
   );
 }
-

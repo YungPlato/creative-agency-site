@@ -21,21 +21,28 @@ export default function Hero3D() {
     const group = new THREE.Group();
     scene.add(group);
 
-    const geometry = new THREE.IcosahedronGeometry(1.2, 2);
+    const geometry = new THREE.TorusKnotGeometry(1, 0.3, 200, 32);
     const wire = new THREE.WireframeGeometry(geometry);
     const line = new THREE.LineSegments(
       wire,
-      new THREE.LineBasicMaterial({ color: 0x00F0FF, transparent: true, opacity: 0.6 })
+      new THREE.LineBasicMaterial({ color: 0x00F0FF, transparent: true, opacity: 0.5 })
     );
     group.add(line);
 
-    const pointsMaterial = new THREE.PointsMaterial({ color: 0xD900FF, size: 0.02 });
+    const pointsMaterial = new THREE.PointsMaterial({ color: 0xD900FF, size: 0.015 });
     const points = new THREE.Points(geometry, pointsMaterial);
     group.add(points);
 
     const light = new THREE.PointLight(0xffffff, 1, 100);
     light.position.set(3, 3, 3);
     scene.add(light);
+
+    const mouse = { x: 0, y: 0 };
+    const onMouseMove = (e: MouseEvent) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+    window.addEventListener('mousemove', onMouseMove);
 
     const onResize = () => {
       if (!containerRef.current) return;
@@ -47,10 +54,13 @@ export default function Hero3D() {
     };
     window.addEventListener('resize', onResize);
 
+    const clock = new THREE.Clock();
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
-      group.rotation.x += 0.002;
-      group.rotation.y += 0.003;
+      const elapsedTime = clock.getElapsedTime();
+      group.rotation.y = elapsedTime * 0.1;
+      group.rotation.x += (mouse.y * 0.5 - group.rotation.x) * 0.05;
+      group.rotation.y += (mouse.x * 0.5 - group.rotation.y) * 0.05;
       renderer.render(scene, camera);
     };
     animate();
@@ -58,6 +68,7 @@ export default function Hero3D() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMouseMove);
       renderer.dispose();
       containerRef.current?.removeChild(renderer.domElement);
     };
