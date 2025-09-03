@@ -1,10 +1,10 @@
 import SafeImage from './SafeImage';
 
 const images = [
-  { src: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1887', alt: 'Cafe — AI-driven promos' },
-  { src: 'https://images.unsplash.com/photo-1582582621955-cdb1e8e9f1ae?q=80&w=1887', alt: 'Salon — automated bookings' },
-  { src: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070', alt: 'E-Commerce — smarter recommendations' },
-  { src: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974', alt: 'Groceries — optimized inventory' }
+  { src: 'https://images.unsplash.com/photo-1644088379091-d574269d422f?q=80&w=1800', alt: 'Abstract blue data points' },
+  { src: 'https://images.unsplash.com/photo-1579567761406-4684ee0c75b6?q=80&w=1800', alt: 'Futuristic data visualization' },
+  { src: 'https://images.unsplash.com/photo-1650473395434-8674d953ef2f?q=80&w=1800', alt: 'Neural network concept' },
+  { src: 'https://images.unsplash.com/photo-1510906594845-bc082582c8cc?q=80&w=1800', alt: 'Flowing light trails' }
 ];
 
 export default function ImageGrid() {
