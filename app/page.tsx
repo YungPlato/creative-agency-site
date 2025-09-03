@@ -1,10 +1,49 @@
 import Nav from '../components/Nav';
 import Hero from '../components/Hero';
 import SectionDivider from '../components/SectionDivider';
-import ImageGrid from '../components/ImageGrid';
+import Businesses from '../components/Businesses';
 import Testimonials from '../components/Testimonials';
 import Reveal from '../components/Reveal';
-import BlogPreview from '../components/BlogPreview';
+import AiBrainIcon from '../components/icons/AiBrainIcon';
+import AutomationIcon from '../components/icons/AutomationIcon';
+import SeoIcon from '../components/icons/SeoIcon';
+import DataIcon from '../components/icons/DataIcon';
+import ContentIcon from '../components/icons/ContentIcon';
+import BrandIcon from '../components/icons/BrandIcon';
+import WorkflowIcon from '../components/icons/WorkflowIcon';
+import ContactForm from '../components/ContactForm';
+import Link from 'next/link';
+
+const pillars = [
+  {
+    title: 'AI Branding',
+    href: '/services/ai-branding',
+    color: 'from-brandPink',
+    icon: AiBrainIcon,
+    description: 'Launch with a brand you love, powered by AI.'
+  },
+  {
+    title: 'Marketing Automation',
+    href: '/services/marketing-automation',
+    color: 'from-brandCyan',
+    icon: AutomationIcon,
+    description: 'Automate your marketing to save time and scale.'
+  },
+  {
+    title: 'Local SEO & Reviews',
+    href: '/services/local-seo-reviews',
+    color: 'from-brandPink',
+    icon: SeoIcon,
+    description: 'Dominate local search and manage your reputation.'
+  },
+  {
+    title: 'Data & Insights',
+    href: '/services/data-insights',
+    color: 'from-brandCyan',
+    icon: DataIcon,
+    description: 'Turn data into actionable insights for growth.'
+  }
+];
 
 export default function HomePage() {
   return (
@@ -19,34 +58,23 @@ export default function HomePage() {
           <p className="text-center text-gray-400 mb-12">The foundation of our strategy to elevate your business.</p>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[{
-            title: 'AI Branding', color: 'from-brandPink'
-          }, { title: 'Marketing Automation', color: 'from-brandCyan' }, { title: 'Local SEO & Reviews', color: 'from-brandPink' }, { title: 'Data & Insights', color: 'from-brandCyan' }].map(card => (
+          {pillars.map(card => (
             <Reveal key={card.title}>
-              <div className="p-8 rounded-2xl glass group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow">
-                <h3 className={`text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-br ${card.color} to-white mb-2`}>{card.title}</h3>
-                <p className="text-gray-400">Launch with a brand you love</p>
-              </div>
+              <Link href={card.href}>
+                <div className="p-8 rounded-2xl glass group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow text-center h-full">
+                  <card.icon className="w-12 h-12 mx-auto mb-4 text-brandPink" />
+                  <h3 className={`text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-br ${card.color} to-white mb-2`}>{card.title}</h3>
+                  <p className="text-gray-400">{card.description}</p>
+                </div>
+              </Link>
             </Reveal>
           ))}
         </div>
       </section>
 
       <SectionDivider />
-      <ImageGrid />
+      <Businesses />
       <SectionDivider />
-      <Testimonials />
-      <SectionDivider />
-      <BlogPreview />
-
-      <section id="about" className="container mx-auto px-6 py-16 scroll-mt-28">
-        <Reveal>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Built for AI-Powered Growth</h2>
-          <p className="max-w-3xl mx-auto text-center text-gray-400">
-            We design brand systems and deploy AI automations that attract, convert, and retain customers. From content to reviews to SEO, your growth engine runs on AI.
-          </p>
-        </Reveal>
-      </section>
 
       <section id="kits" className="container mx-auto px-6 py-16 scroll-mt-28">
         <Reveal>
@@ -55,9 +83,10 @@ export default function HomePage() {
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Reveal>
-            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all text-center">
+              <ContentIcon className="w-12 h-12 mx-auto mb-4 text-brandCyan" />
               <h3 className="text-xl font-semibold text-white mb-2">AI Content Starter</h3>
-              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+              <ul className="text-gray-300 space-y-2 list-disc pl-5 text-left">
                 <li>30-day content calendar + prompts</li>
                 <li>Auto-generated captions and images</li>
                 <li>Posting workflow setup (1 channel)</li>
@@ -65,9 +94,10 @@ export default function HomePage() {
             </div>
           </Reveal>
           <Reveal>
-            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all text-center">
+              <BrandIcon className="w-12 h-12 mx-auto mb-4 text-brandCyan" />
               <h3 className="text-xl font-semibold text-white mb-2">Kickstart Brand Kit</h3>
-              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+              <ul className="text-gray-300 space-y-2 list-disc pl-5 text-left">
                 <li>AI-assisted naming + messaging</li>
                 <li>Logo directions and color system</li>
                 <li>Profile assets for all socials</li>
@@ -75,9 +105,10 @@ export default function HomePage() {
             </div>
           </Reveal>
           <Reveal>
-            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all text-center">
+              <WorkflowIcon className="w-12 h-12 mx-auto mb-4 text-brandCyan" />
               <h3 className="text-xl font-semibold text-white mb-2">AI Starter Workflow</h3>
-              <ul className="text-gray-300 space-y-2 list-disc pl-5">
+              <ul className="text-gray-300 space-y-2 list-disc pl-5 text-left">
                 <li>One tool fully set up (e.g., reviews)</li>
                 <li>Personalized prompt library</li>
                 <li>Hands-on training + 30 days support</li>
@@ -86,6 +117,31 @@ export default function HomePage() {
           </Reveal>
         </div>
       </section>
+
+      <SectionDivider />
+
+      <section id="actions" className="container mx-auto px-6 py-16 scroll-mt-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Reveal>
+            <Link href="/pricing">
+              <div className="p-8 rounded-2xl glass group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow text-center">
+                <h3 className="text-2xl font-bold text-white mb-2">View Our Pricing</h3>
+                <p className="text-gray-400">Find the perfect plan for your business.</p>
+              </div>
+            </Link>
+          </Reveal>
+          <Reveal>
+            <Link href="/courses">
+              <div className="p-8 rounded-2xl glass group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow text-center">
+                <h3 className="text-2xl font-bold text-white mb-2">Explore Our Courses</h3>
+                <p className="text-gray-400">Learn AI from the ground up with our expert-led courses.</p>
+              </div>
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      <SectionDivider />
 
       <section id="results" className="container mx-auto px-6 py-16 scroll-mt-28">
         <Reveal>
@@ -102,44 +158,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="pricing" className="container mx-auto px-6 py-16 scroll-mt-28">
-        <Reveal>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Simple Pricing</h2>
-          <p className="text-center text-gray-400 mb-8">Start with a kit, scale with a plan.</p>
-        </Reveal>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
-            <h3 className="text-xl font-semibold text-white">Launch</h3>
-            <div className="text-3xl font-extrabold mt-2">$499</div>
-            <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
-              <li>One Starter Kit included</li>
-              <li>1hr strategy call</li>
-              <li>Templates and guides</li>
-            </ul>
-            <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
-          </div>
-          <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
-            <h3 className="text-xl font-semibold text-white">Grow</h3>
-            <div className="text-3xl font-extrabold mt-2">$1,499</div>
-            <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
-              <li>Two Starter Kits included</li>
-              <li>Automation setup (2 tools)</li>
-              <li>Monthly report + review</li>
-            </ul>
-            <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
-          </div>
-          <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
-            <h3 className="text-xl font-semibold text-white">Scale</h3>
-            <div className="text-3xl font-extrabold mt-2">$2,999</div>
-            <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
-              <li>All Starter Kits included</li>
-              <li>Automation setup (4 tools)</li>
-              <li>Quarterly strategy + priority support</li>
-            </ul>
-            <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Choose</a>
-          </div>
-        </div>
-      </section>
+
+
+      <SectionDivider />
+      <Testimonials />
+      <SectionDivider />
+      <ContactForm />
 
       <footer className="border-t border-brandPink/30 bg-gray-900/50">
         <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
@@ -149,10 +173,11 @@ export default function HomePage() {
           </div>
           <nav className="flex gap-6 items-center">
             <a href="#services" className="hover:text-brandCyan">Services</a>
-            <a href="#about" className="hover:text-brandCyan">About</a>
             <a href="#kits" className="hover:text-brandCyan">Kits</a>
             <a href="#results" className="hover:text-brandCyan">Results</a>
-            <a href="/blog" className="hover:text-brandCyan">Blog</a>
+            <a href="#pricing" className="hover:text-brandCyan">Pricing</a>
+            <a href="#courses" className="hover:text-brandCyan">Courses</a>
+            <a href="#contact" className="hover:text-brandCyan">Contact</a>
             <a href="/sitemap.xml" className="hover:text-brandCyan">Sitemap</a>
             <a href="https://www.instagram.com/Creative_displayname" target="_blank" rel="noopener noreferrer" className="hover:text-brandCyan">Instagram</a>
           </nav>
@@ -161,4 +186,3 @@ export default function HomePage() {
     </main>
   );
 }
-

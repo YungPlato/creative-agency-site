@@ -3,18 +3,31 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 
+const services = [
+  { href: '/services/ai-branding', label: 'AI Branding' },
+  { href: '/services/marketing-automation', label: 'Marketing Automation' },
+  { href: '/services/local-seo-reviews', label: 'Local SEO & Reviews' },
+  { href: '/services/data-insights', label: 'Data & Insights' }
+];
+
+const courses = [
+  { href: '/courses/ai-for-beginners', label: 'AI for Beginners' },
+  { href: '/courses/advanced-ai-for-business', label: 'Advanced AI for Business' }
+];
+
 const sections = [
-  { href: '#services', label: 'Services' },
-  { href: '#about', label: 'About' },
-  { href: '#courses', label: 'Courses' },
+  { href: '#businesses', label: 'Businesses' },
   { href: '#kits', label: 'Kits' },
   { href: '#results', label: 'Results' },
-  { href: '#pricing', label: 'Pricing' }
+  { href: '#about', label: 'About' },
+  { href: '#contact', label: 'Contact' }
 ];
 
 export default function Nav() {
   const [active, setActive] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
+  const [servicesOpen, setServicesOpen] = useState<boolean>(false);
+  const [coursesOpen, setCoursesOpen] = useState<boolean>(false);
   const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -37,7 +50,7 @@ export default function Nav() {
   return (
     <header ref={navRef} className="fixed top-0 left-0 right-0 z-50 transition-all">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center glass">
-        <Link href="#" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brandPink to-brandCyan">
+        <Link href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brandPink to-brandCyan">
           Creative Display Name
         </Link>
         <button
@@ -48,6 +61,53 @@ export default function Nav() {
           Menu
         </button>
         <div className="hidden md:flex space-x-8 items-center">
+          <div className="relative">
+            <button
+              onMouseEnter={() => setServicesOpen(true)}
+              onMouseLeave={() => setServicesOpen(false)}
+              className={`transition-colors hover:text-brandCyan ${active === '#services' ? 'text-brandCyan' : 'text-gray-300'}`}
+            >
+              Services
+            </button>
+            {servicesOpen && (
+              <div
+                onMouseEnter={() => setServicesOpen(true)}
+                onMouseLeave={() => setServicesOpen(false)}
+                className="absolute top-full left-0 mt-2 w-48 bg-gray-800/80 backdrop-blur-lg rounded-md shadow-lg"
+              >
+                {services.map(s => (
+                  <Link key={s.href} href={s.href} className="block px-4 py-2 text-gray-300 hover:bg-gray-700/50 hover:text-brandCyan">
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+          <Link href="/pricing" className="transition-colors hover:text-brandCyan text-gray-300">
+            Pricing
+          </Link>
+          <div className="relative">
+            <button
+              onMouseEnter={() => setCoursesOpen(true)}
+              onMouseLeave={() => setCoursesOpen(false)}
+              className={`transition-colors hover:text-brandCyan ${active === '#courses' ? 'text-brandCyan' : 'text-gray-300'}`}
+            >
+              Courses
+            </button>
+            {coursesOpen && (
+              <div
+                onMouseEnter={() => setCoursesOpen(true)}
+                onMouseLeave={() => setCoursesOpen(false)}
+                className="absolute top-full left-0 mt-2 w-56 bg-gray-800/80 backdrop-blur-lg rounded-md shadow-lg"
+              >
+                {courses.map(c => (
+                  <Link key={c.href} href={c.href} className="block px-4 py-2 text-gray-300 hover:bg-gray-700/50 hover:text-brandCyan">
+                    {c.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
           {sections.map(s => (
             <a
               key={s.href}
@@ -85,4 +145,3 @@ export default function Nav() {
     </header>
   );
 }
-
