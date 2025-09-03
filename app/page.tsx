@@ -1,10 +1,9 @@
 import Nav from '../components/Nav';
 import Hero from '../components/Hero';
 import SectionDivider from '../components/SectionDivider';
-import ImageGrid from '../components/ImageGrid';
+import Businesses from '../components/Businesses';
 import Testimonials from '../components/Testimonials';
 import Reveal from '../components/Reveal';
-import BlogPreview from '../components/BlogPreview';
 import AiBrainIcon from '../components/icons/AiBrainIcon';
 import AutomationIcon from '../components/icons/AutomationIcon';
 import SeoIcon from '../components/icons/SeoIcon';
@@ -66,20 +65,8 @@ export default function HomePage() {
       </section>
 
       <SectionDivider />
-      <ImageGrid />
+      <Businesses />
       <SectionDivider />
-      <Testimonials />
-      <SectionDivider />
-      <BlogPreview />
-
-      <section id="about" className="container mx-auto px-6 py-16 scroll-mt-28">
-        <Reveal>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Built for AI-Powered Growth</h2>
-          <p className="max-w-3xl mx-auto text-center text-gray-400">
-            We design brand systems and deploy AI automations that attract, convert, and retain customers. From content to reviews to SEO, your growth engine runs on AI.
-          </p>
-        </Reveal>
-      </section>
 
       <section id="kits" className="container mx-auto px-6 py-16 scroll-mt-28">
         <Reveal>
@@ -123,6 +110,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <SectionDivider />
+
       <section id="results" className="container mx-auto px-6 py-16 scroll-mt-28">
         <Reveal>
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Results That Compound</h2>
@@ -138,6 +127,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <SectionDivider />
+
       <section id="pricing" className="container mx-auto px-6 py-16 scroll-mt-28">
         <Reveal>
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Simple Pricing</h2>
@@ -146,7 +137,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
             <h3 className="text-xl font-semibold text-white">Launch</h3>
-            <div className="text-3xl font-extrabold mt-2">$499</div>
+            <div className="text-3xl font-extrabold mt-2">$399</div>
             <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
               <li>One Starter Kit included</li>
               <li>1hr strategy call</li>
@@ -156,7 +147,7 @@ export default function HomePage() {
           </div>
           <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
             <h3 className="text-xl font-semibold text-white">Grow</h3>
-            <div className="text-3xl font-extrabold mt-2">$1,499</div>
+            <div className="text-3xl font-extrabold mt-2">$1,299</div>
             <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
               <li>Two Starter Kits included</li>
               <li>Automation setup (2 tools)</li>
@@ -166,7 +157,7 @@ export default function HomePage() {
           </div>
           <div className="glass rounded-2xl p-8 hover:-translate-y-2 transition-all">
             <h3 className="text-xl font-semibold text-white">Scale</h3>
-            <div className="text-3xl font-extrabold mt-2">$2,999</div>
+            <div className="text-3xl font-extrabold mt-2">$2,499</div>
             <ul className="text-gray-300 space-y-2 list-disc pl-5 mt-4">
               <li>All Starter Kits included</li>
               <li>Automation setup (4 tools)</li>
@@ -177,6 +168,45 @@ export default function HomePage() {
         </div>
       </section>
 
+      <SectionDivider />
+
+      <section id="courses" className="container mx-auto px-6 py-16 scroll-mt-28">
+        <Reveal>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Learn AI with Our Courses</h2>
+          <p className="text-center text-gray-400 mb-8">Level up your skills with our expert-led AI courses.</p>
+        </Reveal>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Reveal>
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+              <h3 className="text-xl font-semibold text-white mb-2">AI for Beginners</h3>
+              <p className="text-gray-400 mb-4">A beginner-friendly introduction to the world of AI, covering the basics of machine learning, neural networks, and more.</p>
+              <div className="text-3xl font-extrabold text-white mb-4">$99</div>
+              <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Enroll Now</a>
+            </div>
+          </Reveal>
+          <Reveal>
+            <div className="p-6 rounded-2xl glass hover:-translate-y-2 transition-all">
+              <h3 className="text-xl font-semibold text-white mb-2">Advanced AI for Business</h3>
+              <p className="text-gray-400 mb-4">Learn how to leverage AI to grow your business, with advanced topics like data analysis, marketing automation, and more.</p>
+              <div className="text-3xl font-extrabold text-white mb-4">$299</div>
+              <a href="#contact" className="mt-6 inline-block px-5 py-2 rounded-md bg-brandPink text-black font-semibold hover:bg-brandCyan transition-all">Enroll Now</a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <SectionDivider />
+      <Testimonials />
+      <SectionDivider />
+      <section id="about" className="container mx-auto px-6 py-16 scroll-mt-28">
+        <Reveal>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">About Us</h2>
+          <p className="max-w-3xl mx-auto text-center text-gray-400">
+            We are a team of AI experts and business strategists dedicated to helping small businesses thrive in the age of AI. We believe that AI should be accessible to everyone, and we're here to help you unlock its full potential.
+          </p>
+        </Reveal>
+      </section>
+
       <footer className="border-t border-brandPink/30 bg-gray-900/50">
         <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <div>
@@ -185,10 +215,11 @@ export default function HomePage() {
           </div>
           <nav className="flex gap-6 items-center">
             <a href="#services" className="hover:text-brandCyan">Services</a>
-            <a href="#about" className="hover:text-brandCyan">About</a>
             <a href="#kits" className="hover:text-brandCyan">Kits</a>
             <a href="#results" className="hover:text-brandCyan">Results</a>
-            <a href="/blog" className="hover:text-brandCyan">Blog</a>
+            <a href="#pricing" className="hover:text-brandCyan">Pricing</a>
+            <a href="#courses" className="hover:text-brandCyan">Courses</a>
+            <a href="#about" className="hover:text-brandCyan">About</a>
             <a href="/sitemap.xml" className="hover:text-brandCyan">Sitemap</a>
             <a href="https://www.instagram.com/Creative_displayname" target="_blank" rel="noopener noreferrer" className="hover:text-brandCyan">Instagram</a>
           </nav>

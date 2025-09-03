@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import Providers from './providers';
+import Background3D from '../components/Background3D';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://CreativeDisplayName.com'),
@@ -45,6 +46,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className="text-gray-200">
         <Providers>
+          <Background3D />
           {children}
         </Providers>
         <script

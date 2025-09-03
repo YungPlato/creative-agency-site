@@ -5,11 +5,12 @@ import ThemeToggle from './ThemeToggle';
 
 const sections = [
   { href: '#services', label: 'Services' },
-  { href: '#about', label: 'About' },
-  { href: '#courses', label: 'Courses' },
+  { href: '#businesses', label: 'Businesses' },
   { href: '#kits', label: 'Kits' },
   { href: '#results', label: 'Results' },
-  { href: '#pricing', label: 'Pricing' }
+  { href: '#pricing', label: 'Pricing' },
+  { href: '#courses', label: 'Courses' },
+  { href: '#about', label: 'About' }
 ];
 
 export default function Nav() {
