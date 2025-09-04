@@ -10,7 +10,8 @@ const sections = [
   { href: '#results', label: 'Results' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#courses', label: 'Courses' },
-  { href: '#about', label: 'About' }
+  { href: '#about', label: 'About' },
+  { href: '#contact', label: 'Contact' }
 ];
 
 export default function Nav() {
