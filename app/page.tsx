@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import SectionDivider from '../components/SectionDivider';
 import Businesses from '../components/Businesses';
 import Testimonials from '../components/Testimonials';
+import ContactForm from '../components/ContactForm';
 import Reveal from '../components/Reveal';
 import AiBrainIcon from '../components/icons/AiBrainIcon';
 import AutomationIcon from '../components/icons/AutomationIcon';
@@ -207,6 +208,9 @@ export default function HomePage() {
         </Reveal>
       </section>
 
+      <SectionDivider />
+      <ContactForm />
+
       <footer className="border-t border-brandPink/30 bg-gray-900/50">
         <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <div>
@@ -220,6 +224,7 @@ export default function HomePage() {
             <a href="#pricing" className="hover:text-brandCyan">Pricing</a>
             <a href="#courses" className="hover:text-brandCyan">Courses</a>
             <a href="#about" className="hover:text-brandCyan">About</a>
+            <a href="#contact" className="hover:text-brandCyan">Contact</a>
             <a href="/sitemap.xml" className="hover:text-brandCyan">Sitemap</a>
             <a href="https://www.instagram.com/Creative_displayname" target="_blank" rel="noopener noreferrer" className="hover:text-brandCyan">Instagram</a>
           </nav>
