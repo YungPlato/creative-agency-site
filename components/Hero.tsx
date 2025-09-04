@@ -2,8 +2,10 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Modal from './Modal';
-import Hero3D from './Hero3D';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const Hero3D = dynamic(() => import('./Hero3D'), { ssr: false });
 
 export default function Hero() {
   const [open, setOpen] = useState(false);

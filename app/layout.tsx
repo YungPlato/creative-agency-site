@@ -1,7 +1,11 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import Providers from './providers';
-import Background3D from '../components/Background3D';
+import dynamic from 'next/dynamic';
+
+const Background3D = dynamic(() => import('../components/Background3D'), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://CreativeDisplayName.com'),
